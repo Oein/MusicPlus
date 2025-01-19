@@ -1,0 +1,51 @@
+//
+//  HeaderButton.swift
+//  musicplus
+//
+//  Created by oein on 1/19/25.
+//
+
+import SwiftUI
+
+struct HeaderButton: View {
+    var path: String;
+    var icon: String;
+    var name: String;
+    
+    func colorByPath() -> Color {
+        if PathManager.shared.path == path {
+            return Color.foregroundPrimary
+        } else {
+            return Color.foregroundSecondary
+        }
+    }
+    
+    func buttonBackground() -> Color {
+        return Color.component.opacity(path == PathManager.shared.path ? 1.0 : 0.0)
+    }
+    
+    var body: some View {
+        VStack {
+            Button(action: {
+                if PathManager.shared.path != path {
+                    PathManager.shared.goto(path: path, qparm: nil);
+                }
+            }) {
+                HStack(alignment: .center) {
+                    Image(systemName: icon)
+                        .foregroundStyle(colorByPath())
+                        .frame(width: 20, height: 20, alignment: .center)
+                    Text(name)
+                        .font(.satoshiRegular16)
+                        .foregroundStyle(colorByPath())
+                }
+                .padding(.horizontal, 8)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            .buttonStyle(.plain)
+        }
+        .frame(width: 140, height: 44)
+        .background(buttonBackground())
+        .clipShape(.rect(cornerRadius: 6))
+    }
+}
