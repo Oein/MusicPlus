@@ -12,18 +12,28 @@ struct ProgressBar: View {
     @State private var dragOffset: CGFloat = 0 // Tracks the drag position
     @State private var isDragging: Bool = false
     
+    func is_iOS() -> Bool {
+#if os(iOS)
+        return true;
+        #else
+        return false;
+        #endif
+    }
+    
     var body: some View {
         GeometryReader { geo in
             VStack {
                 Spacer()
                 ZStack(alignment: .center) {
                     VStack{}
-                        .frame(width: geo.size.width, height: 6)
+                        .frame(
+                            width: is_iOS() ? max(120, geo.size.width) : geo.size.width
+                            ,height: 6)
                         .background(Color.foregroundTertiary)
                         .clipShape(.rect(cornerRadius: 3))
                     HStack {
                         VStack{}
-                            .frame(width: geo.size.width * TimeVar.shared.now / (TimeVar.shared.dur == 0 ? 1234567890 : TimeVar.shared.dur), height: 6)
+                            .frame(width: (is_iOS() ? max(120, geo.size.width) : geo.size.width) * TimeVar.shared.now / (TimeVar.shared.dur == 0 ? 1234567890 : TimeVar.shared.dur), height: 6)
                             .background(Color.foregroundPrimary)
                             .clipShape(.rect(cornerRadius: 3))
                         Spacer()
@@ -37,11 +47,11 @@ struct ProgressBar: View {
                     isDragging = true
                     TimeVar.shared.dragging = true;
                     // Calculate the new progress based on drag location
-                    let newOffset = max(0, min(value.location.x, geo.size.width))
+                    let newOffset = max(0, min(value.location.x, (is_iOS() ? max(120, geo.size.width) : geo.size.width)))
                     dragOffset = newOffset
                     
                     // Update time based on drag position
-                    let newTime = (newOffset / geo.size.width) * TimeVar.shared.dur
+                    let newTime = (newOffset / (is_iOS() ? max(120, geo.size.width) : geo.size.width)) * TimeVar.shared.dur
                     TimeVar.shared.now = newTime
                 }
                 .onEnded { _ in

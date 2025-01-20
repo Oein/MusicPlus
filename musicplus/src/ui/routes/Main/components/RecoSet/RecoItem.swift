@@ -75,6 +75,27 @@ struct RecoItem: View {
                 }
             })
             .onHover(perform: onHov)
+            .onTapGesture(perform: {
+#if os(iOS)
+                    Task {
+                        switch recoitem {
+                        case .album(let album):
+                            MusicKit.ApplicationMusicPlayer.shared.queue = [album];
+                            break;
+                        case .playlist(let playlist):
+                            MusicKit.ApplicationMusicPlayer.shared.queue = [playlist];
+                            break;
+                        case .station(let station):
+                            MusicKit.ApplicationMusicPlayer.shared.queue = [station];
+                            break;
+                        @unknown default:
+                            break;
+                        }
+                        
+                        try await MusicKit.ApplicationMusicPlayer.shared.play()
+                    }
+#endif
+            })
             
             Text(recoitem.title)
                 .truncationMode(.tail)

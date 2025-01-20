@@ -109,7 +109,6 @@ struct Playbar: View {
     func onDisappear() {
         TimeVar.shared.timer?.invalidate();
     }
-
     
     var body: some View {
         VStack {
@@ -143,7 +142,12 @@ struct Playbar: View {
                         Text(format_time(d: TimeVar.shared.now))
                             .font(.satoshiRegular14)
                             .frame(minWidth: 50, alignment: .center)
+#if os(iOS)
+                        
+                        ProgressBar().frame(minWidth: 120)
+#else
                         ProgressBar()
+#endif
                         Text(format_time(d: TimeVar.shared.dur))
                             .font(.satoshiRegular14)
                             .frame(minWidth: 50, alignment: .center)

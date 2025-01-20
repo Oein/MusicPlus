@@ -18,7 +18,6 @@ struct Layout<Content: View>: View {
     var body: some View {
         GeometryReader { _geo in
             HStack {
-                Sidebar()
                 VStack(alignment: .leading) {
                     Header()
                     VStack {
@@ -36,8 +35,19 @@ struct Layout<Content: View>: View {
                         )
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+#if os(iOS)
+                    ScrollView(.horizontal) {
+                        Playbar()
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .frame(height: 80)
+                        .background(Color("Playbar"))
+                        .clipShape(.rect(cornerRadius: 6))
+#else
                     Playbar()
                         .frame(maxWidth: .infinity, alignment: .leading)
+#endif
                 }.frame(maxWidth: .infinity)
             }
         }

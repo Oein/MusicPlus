@@ -100,6 +100,32 @@ struct SearchItemArtwork: View {
         hoveredPlayBTN = hovVal;
     }
     
+    func play_self() {
+        Task {
+            var play = true;
+            switch recoitem {
+            case .song(let song):
+                MusicKit.ApplicationMusicPlayer.shared.queue = [song];
+                break;
+            case .album(let album):
+                MusicKit.ApplicationMusicPlayer.shared.queue = [album];
+                break;
+            case .playlist(let playlist):
+                MusicKit.ApplicationMusicPlayer.shared.queue = [playlist];
+                break;
+            case .station(let station):
+                MusicKit.ApplicationMusicPlayer.shared.queue = [station];
+                break;
+            default:
+                play = false;
+                break;
+            }
+            if play {
+                try await MusicKit.ApplicationMusicPlayer.shared.play()
+            }
+        }
+    }
+    
     var body: some View {
         AsyncImage(
             url: artwork.url(width: 384, height: 384),
@@ -121,31 +147,7 @@ struct SearchItemArtwork: View {
         })
         .overlay(alignment: .bottomLeading, content: {
             if recoitem.canBePlayed() && hovered {
-                Button(action: {
-                    Task {
-                        var play = true;
-                        switch recoitem {
-                        case .song(let song):
-                            MusicKit.ApplicationMusicPlayer.shared.queue = [song];
-                            break;
-                        case .album(let album):
-                            MusicKit.ApplicationMusicPlayer.shared.queue = [album];
-                            break;
-                        case .playlist(let playlist):
-                            MusicKit.ApplicationMusicPlayer.shared.queue = [playlist];
-                            break;
-                        case .station(let station):
-                            MusicKit.ApplicationMusicPlayer.shared.queue = [station];
-                            break;
-                        default:
-                            play = false;
-                            break;
-                        }
-                        if play {
-                            try await MusicKit.ApplicationMusicPlayer.shared.play()
-                        }
-                    }
-                }, label: {
+                Button(action: play_self, label: {
                     Image(systemName: "play.fill").padding(8)
                         .contentShape(Circle())
                 })
@@ -157,5 +159,10 @@ struct SearchItemArtwork: View {
             }
         })
         .onHover(perform: onHov)
+        .onTapGesture(perform: {
+#if os(iOS)
+            play_self()
+#endif
+        })
     }
 }
