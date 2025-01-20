@@ -15,6 +15,8 @@ struct RecoItem: View {
     @State var hovered = false;
     @State var hoveredPlayBTN = false;
     
+    @State var appear = false;
+    
     func onHov(hovVal: Bool) {
         hovered = hovVal;
     }
@@ -23,59 +25,64 @@ struct RecoItem: View {
         hoveredPlayBTN = hovVal;
     }
     
+    func onVischange(vis: Bool) {
+        appear = appear || vis;
+    }
+    
     var body: some View {
         VStack(alignment: .leading) {
-            AsyncImage(
-                url: recoitem.artwork!.url(width: 384, height: 384),
-                content: { image in
-                    image.resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(maxWidth: 192, maxHeight: 192)
-                        .clipShape(.rect(cornerRadius: 4))
-                },
-                placeholder: {
-                    ProgressView()
-                }
-            )
-            .frame(width: 192, height: 192, alignment: .center)
-            .overlay(content: {
-                if hovered {
-                    Color.black.opacity(0.4).clipShape(.rect(cornerRadius: 4))
-                }
-            })
-            .overlay(alignment: .bottomLeading, content: {
-                if hovered {
-                    Button(action: {
-                        Task {
-                            switch recoitem {
-                            case .album(let album):
-                                MusicKit.ApplicationMusicPlayer.shared.queue = [album];
-                                break;
-                            case .playlist(let playlist):
-                                MusicKit.ApplicationMusicPlayer.shared.queue = [playlist];
-                                break;
-                            case .station(let station):
-                                MusicKit.ApplicationMusicPlayer.shared.queue = [station];
-                                break;
-                            @unknown default:
-                                break;
+            if appear {
+                AsyncImage(
+                    url: recoitem.artwork!.url(width: 384, height: 384),
+                    content: { image in
+                        image.resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(maxWidth: 192, maxHeight: 192)
+                            .clipShape(.rect(cornerRadius: 4))
+                    },
+                    placeholder: {
+                        ProgressView()
+                    }
+                )
+                .frame(width: 192, height: 192, alignment: .center)
+                .overlay(content: {
+                    if hovered {
+                        Color.black.opacity(0.4).clipShape(.rect(cornerRadius: 4))
+                    }
+                })
+                .overlay(alignment: .bottomLeading, content: {
+                    if hovered {
+                        Button(action: {
+                            Task {
+                                switch recoitem {
+                                case .album(let album):
+                                    MusicKit.ApplicationMusicPlayer.shared.queue = [album];
+                                    break;
+                                case .playlist(let playlist):
+                                    MusicKit.ApplicationMusicPlayer.shared.queue = [playlist];
+                                    break;
+                                case .station(let station):
+                                    MusicKit.ApplicationMusicPlayer.shared.queue = [station];
+                                    break;
+                                @unknown default:
+                                    break;
+                                }
+                                
+                                try await MusicKit.ApplicationMusicPlayer.shared.play()
                             }
-                            
-                            try await MusicKit.ApplicationMusicPlayer.shared.play()
-                        }
-                    }, label: {
-                        Image(systemName: "play.fill").padding(8)
-                            .contentShape(Circle())
-                    })
-                    .buttonStyle(.plain)
-                    .background(hoveredPlayBTN ? Color.servicePrimary : Color.black.opacity(0.2))
-                    .clipShape(.circle)
-                    .padding(8)
-                    .onHover(perform: onHovPlay)
-                }
-            })
-            .onHover(perform: onHov)
-            .onTapGesture(perform: {
+                        }, label: {
+                            Image(systemName: "play.fill").padding(8)
+                                .contentShape(Circle())
+                        })
+                        .buttonStyle(.plain)
+                        .background(hoveredPlayBTN ? Color.servicePrimary : Color.black.opacity(0.2))
+                        .clipShape(.circle)
+                        .padding(8)
+                        .onHover(perform: onHovPlay)
+                    }
+                })
+                .onHover(perform: onHov)
+                .onTapGesture(perform: {
 #if os(iOS)
                     Task {
                         switch recoitem {
@@ -95,11 +102,17 @@ struct RecoItem: View {
                         try await MusicKit.ApplicationMusicPlayer.shared.play()
                     }
 #endif
-            })
+                })
+            } else {
+                VStack {
+                    
+                }.frame(width: 192, height: 192)
+            }
             
             Text(recoitem.title)
                 .truncationMode(.tail)
                 .frame(maxWidth: 192, maxHeight: 20, alignment: .topLeading)
         }.frame(width: 192, alignment: .topLeading)
+            .onScrollVisibilityChange(onVischange)
     }
 }

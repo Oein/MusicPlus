@@ -89,6 +89,7 @@ struct SearchItem: View {
 struct SearchItemArtwork: View {
     @State var hovered = false;
     @State var hoveredPlayBTN = false;
+    @State var appear = false;
     var artwork: Artwork;
     var recoitem: MusicItemAny;
     
@@ -98,6 +99,10 @@ struct SearchItemArtwork: View {
     
     func onHovPlay(hovVal: Bool) {
         hoveredPlayBTN = hovVal;
+    }
+    
+    func onVischange(vis: Bool) {
+        appear = appear || vis;
     }
     
     func play_self() {
@@ -127,42 +132,47 @@ struct SearchItemArtwork: View {
     }
     
     var body: some View {
-        AsyncImage(
-            url: artwork.url(width: 384, height: 384),
-            content: { image in
-                image.resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(maxWidth: 192, maxHeight: 192)
-                    .clipShape(.rect(cornerRadius: 4))
-            },
-            placeholder: {
-                ProgressView()
-            }
-        )
-        .frame(width: 192, height: 192, alignment: .center)
-        .overlay(content: {
-            if recoitem.canBePlayed() && hovered {
-                Color.black.opacity(0.4).clipShape(.rect(cornerRadius: 4))
-            }
-        })
-        .overlay(alignment: .bottomLeading, content: {
-            if recoitem.canBePlayed() && hovered {
-                Button(action: play_self, label: {
-                    Image(systemName: "play.fill").padding(8)
-                        .contentShape(Circle())
-                })
-                .buttonStyle(.plain)
-                .background(hoveredPlayBTN ? Color.servicePrimary : Color.black.opacity(0.2))
-                .clipShape(.circle)
-                .padding(8)
-                .onHover(perform: onHovPlay)
-            }
-        })
-        .onHover(perform: onHov)
-        .onTapGesture(perform: {
+        if appear {
+            AsyncImage(
+                url: artwork.url(width: 384, height: 384),
+                content: { image in
+                    image.resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(maxWidth: 192, maxHeight: 192)
+                        .clipShape(.rect(cornerRadius: 4))
+                },
+                placeholder: {
+                    ProgressView()
+                }
+            )
+            .frame(width: 192, height: 192, alignment: .center)
+            .overlay(content: {
+                if recoitem.canBePlayed() && hovered {
+                    Color.black.opacity(0.4).clipShape(.rect(cornerRadius: 4))
+                }
+            })
+            .overlay(alignment: .bottomLeading, content: {
+                if recoitem.canBePlayed() && hovered {
+                    Button(action: play_self, label: {
+                        Image(systemName: "play.fill").padding(8)
+                            .contentShape(Circle())
+                    })
+                    .buttonStyle(.plain)
+                    .background(hoveredPlayBTN ? Color.servicePrimary : Color.black.opacity(0.2))
+                    .clipShape(.circle)
+                    .padding(8)
+                    .onHover(perform: onHovPlay)
+                }
+            })
+            .onHover(perform: onHov)
+            .onTapGesture(perform: {
 #if os(iOS)
-            play_self()
+                play_self()
 #endif
-        })
+            })
+            .onScrollVisibilityChange(onVischange)
+        } else {
+            VStack{}.frame(width: 192, height: 192).onScrollVisibilityChange(onVischange)
+        }
     }
 }
