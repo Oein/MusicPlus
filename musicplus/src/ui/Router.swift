@@ -22,6 +22,10 @@ struct Router: View {
                         MainPage()
                     case "::search":
                         Search()
+                    case "::lib-reccent":
+                        ReccentlyAdded()
+                    case "::lib-song":
+                        LibSong()
                     default:
                         NotFound()
                     }
