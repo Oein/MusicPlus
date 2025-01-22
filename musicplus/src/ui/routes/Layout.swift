@@ -10,6 +10,14 @@ import SwiftUI
 
 struct Layout<Content: View>: View {
     let content: Content
+    func defaultShow() -> Bool {
+#if os(iOS)
+        return false;
+#else
+        return true;
+#endif
+    }
+    @State var show = true;
     
     init(@ViewBuilder content: () -> Content) {
         self.content = content()
@@ -17,7 +25,21 @@ struct Layout<Content: View>: View {
     
     var body: some View {
         GeometryReader { _geo in
-            HStack {
+            HStack(spacing: show ? 8 : 0) {
+                Sidebar(show: show)
+                    .offset(x: show ? 0 : -12)
+                    .gesture(
+                        DragGesture()
+                            .onEnded({ value in
+                                print(value.translation.width)
+                                if value.translation.width > 80 {
+                                    show = true;
+                                }
+                                if value.translation.width < -80 {
+                                    show = false;
+                                }
+                            })
+                    )
                 VStack(alignment: .leading) {
                     Header()
                     VStack {

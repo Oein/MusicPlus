@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 
 struct Sidebar: View {
+    var show: Bool;
     var body: some View {
         VStack {
             VStack {
@@ -34,7 +35,7 @@ struct Sidebar: View {
             Spacer()
         }
         .frame(maxHeight: .infinity, alignment: .leading)
-        .frame(width: 180, alignment: .leading)
+        .frame(width: show ? 180 : 6, alignment: .leading)
         .padding(.leading, 6)
         .background(Color.component)
         .clipShape(.rect(cornerRadius: 6))
