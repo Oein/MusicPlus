@@ -131,6 +131,15 @@ struct SearchItemArtwork: View {
         }
     }
     
+    func isArtist() -> Bool {
+        switch recoitem {
+        case .artist(let artist):
+            return true
+        default:
+            return false
+        }
+    }
+    
     var body: some View {
         if appear {
             AsyncImage(
@@ -139,7 +148,7 @@ struct SearchItemArtwork: View {
                     image.resizable()
                         .aspectRatio(contentMode: .fit)
                         .frame(maxWidth: 192, maxHeight: 192)
-                        .clipShape(.rect(cornerRadius: 4))
+                        .clipShape(isArtist() ? .rect(cornerRadius: 96) : .rect(cornerRadius: 4))
                 },
                 placeholder: {
                     ProgressView()
@@ -147,7 +156,7 @@ struct SearchItemArtwork: View {
             )
             .frame(width: 192, height: 192, alignment: .center)
             .overlay(content: {
-                if recoitem.canBePlayed() && hovered {
+                if hovered {
                     Color.black.opacity(0.4).clipShape(.rect(cornerRadius: 4))
                 }
             })
@@ -166,6 +175,38 @@ struct SearchItemArtwork: View {
             })
             .onHover(perform: onHov)
             .onTapGesture(perform: {
+#if os(macOS)
+                switch recoitem {
+                case .album(let album):
+                    print("Pressed a album")
+                    break;
+                case .artist(let artist):
+                    print("Pressed a artist")
+                    break;
+                case .curator(let curator):
+                    print("Pressed a curator")
+                    break;
+                case .musicVideo(let musicVideo):
+                    print("Pressed a musicvideo")
+                    break;
+                case .playlist(let playlist):
+                    print("Pressed a playlist")
+                    break;
+                case .radioShow(let radioShow):
+                    print("Pressed a radio show")
+                    break;
+                case .recordLabel(let recordLabel):
+                    print("Pressed a recordLabel")
+                    break;
+                case .song(let song):
+                    print("Pressed a song")
+                    break;
+                case .station(let station):
+                    print("Pressed a station")
+                    break;
+                }
+#endif
+                
 #if os(iOS)
                 play_self()
 #endif

@@ -20,7 +20,16 @@ struct RecoSet: View {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack {
                     ForEach(recoset.items, id: \.self) { recoitem in
-                        RecoItem(recoitem: recoitem)
+                        switch recoitem {
+                        case .album(let album):
+                            SearchItem(recoitem: .album(album))
+                        case .playlist(let pl):
+                            SearchItem(recoitem: .playlist(pl))
+                        case .station(let st):
+                            SearchItem(recoitem: .station(st))
+                        default:
+                            Text("Invalid Item")
+                        }
                     }
                 }
             }
