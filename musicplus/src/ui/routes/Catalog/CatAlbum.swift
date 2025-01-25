@@ -7,10 +7,10 @@
 
 import SwiftUI
 
-struct ReccentlyAdded: View {
+struct CatAlbum: View {
     var body: some View {
         Layout {
-            Text("Reccently Added")
+            Text("Album")
         }
     }
 }

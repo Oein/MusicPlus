@@ -10,7 +10,7 @@ import SwiftUI
 struct LibSong: View {
     var body: some View {
         Layout {
-            Text("Hi")
+            Text("Song")
         }
     }
 }

@@ -60,9 +60,9 @@ struct Layout<Content: View>: View {
         GeometryReader { _geo in
 //            LayoutIOSWarp{
                 HStack {
-//#if os(macOS)
-//                    Sidebar()
-//#endif
+#if os(macOS)
+                    Sidebar()
+#endif
                     VStack(alignment: .leading) {
                         Header()
                         VStack {

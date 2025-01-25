@@ -28,15 +28,15 @@ struct ContentView: View {
             case "::lib-song":
                 LibSong()
             case "::lib-artist":
-                Text("LIBARTIST")
+                LibArtist()
             case "::lib-album":
-                Text("LIBALBUM")
+                LibAlbum()
             case "::artist":
-                Text("ARTIST")
+                CatArtist()
             case "::playlist":
-                Text("PLAYLIST")
+                CatPlaylist()
             case "::album":
-                Text("ALBUM")
+                CatAlbum()
             default:
                 NotFound()
             }
