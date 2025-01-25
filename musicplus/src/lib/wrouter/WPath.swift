@@ -13,7 +13,7 @@ import SwiftUI
     static let shared = WPath()
     private init() { }
     
-    public var path = "::blank";
+    public var path = "blank";
     public var queryparm = "";
     public var background: Color? = Color.backgroundMain;
     

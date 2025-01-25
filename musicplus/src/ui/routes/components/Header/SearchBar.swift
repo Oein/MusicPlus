@@ -9,9 +9,9 @@ import SwiftUI
 
 struct SearchBar: View {
     @FocusState private var isTextFieldFocused: Bool
-    @State private var text: String = WPath.shared.path == "::search" ? WPath.shared.queryparm : ""
+    @State private var text: String = WPath.shared.path == "search" ? WPath.shared.queryparm : ""
     
-    var path = "::search";
+    var path = "search";
     var icon = "magnifyingglass";
     var name = "Search";
     
@@ -36,7 +36,7 @@ struct SearchBar: View {
                 if WPath.shared.path == path {
                     TextField("Search", text: $text, onCommit: {
                         if WPath.shared.queryparm != text {
-                            WPath.shared.replace(path: "::search", qparm: text)
+                            WPath.shared.replace(path: "search", qparm: text)
                         }
                     })
                     .textFieldStyle(.plain)
@@ -49,7 +49,7 @@ struct SearchBar: View {
                     }
                     .onChange(of: text, {
                         if WPath.shared.queryparm != text {
-                            WPath.shared.replace(path: "::search", qparm: text)
+                            WPath.shared.replace(path: "search", qparm: text)
                         }
                     })
                 } else {

@@ -66,10 +66,10 @@ struct SearchItemRow: View {
         Button(action: {
             switch recoitem {
             case .album(let album):
-                WPath.shared.goto(path: "::album", qparm: album.id.rawValue)
+                WPath.shared.goto(path: "album", qparm: album.id.rawValue)
                 break;
             case .artist(let artist):
-                WPath.shared.goto(path: "::artist", qparm: artist.id.rawValue)
+                WPath.shared.goto(path: "artist", qparm: artist.id.rawValue)
                 break;
             case .curator(_):
                 print("Pressed a curator")
@@ -78,7 +78,7 @@ struct SearchItemRow: View {
                 print("Pressed a musicvideo")
                 break;
             case .playlist(let playlist):
-                WPath.shared.goto(path: "::playlist", qparm: playlist.id.rawValue)
+                WPath.shared.goto(path: "playlist", qparm: playlist.id.rawValue)
                 break;
             case .radioShow(_):
                 print("Pressed a radio show")
@@ -99,7 +99,10 @@ struct SearchItemRow: View {
                 }
                 break;
             case .station(let station):
-                WPath.shared.goto(path: "::station", qparm: station.id.rawValue)
+                Task {
+                    MusicKit.ApplicationMusicPlayer.shared.queue = [station];
+                    try await MusicKit.ApplicationMusicPlayer.shared.play();
+                }
                 break;
             }
         }) {

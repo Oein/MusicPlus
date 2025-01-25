@@ -15,27 +15,27 @@ struct ContentView: View {
     var body: some View {
         WRouterView { url, _ in
             switch url {
-            case "::blank":
+            case "blank":
                 PreloadPage()
-            case "::auth":
+            case "auth":
                 AuthPage()
-            case "::main":
+            case "main":
                 MainPage()
-            case "::search":
+            case "search":
                 Search()
-            case "::lib-reccent":
+            case "lib-reccent":
                 ReccentlyAdded()
-            case "::lib-song":
+            case "lib-song":
                 LibSong()
-            case "::lib-artist":
+            case "lib-artist":
                 LibArtist()
-            case "::lib-album":
+            case "lib-album":
                 LibAlbum()
-            case "::artist":
+            case "artist":
                 CatArtist()
-            case "::playlist":
+            case "playlist":
                 CatPlaylist()
-            case "::album":
+            case "album":
                 CatAlbum()
             default:
                 NotFound()

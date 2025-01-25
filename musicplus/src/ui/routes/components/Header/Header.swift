@@ -19,10 +19,10 @@ struct Header: View {
     
     var body: some View {
         HStack(alignment: .top) {
-            HeaderButton(path: "::main",  icon: "house",           name: "Home")
-            //            HeaderButton(path: "::search",icon: "magnifyingglass", name: "Search")
+            HeaderButton(path: "main",  icon: "house",           name: "Home")
+            //            HeaderButton(path: "search",icon: "magnifyingglass", name: "Search")
             SearchBar()
-            //            HeaderButton(path: "::radio", icon: "radio",                 name: "Radio")
+            //            HeaderButton(path: "radio", icon: "radio",                 name: "Radio")
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         //        .padding(.leading, 6)

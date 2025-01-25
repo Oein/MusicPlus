@@ -11,9 +11,9 @@ struct PreloadPage: View {
     var body: some View {
         Text("Loading...").onAppear(perform: {
             if MusicKitManager.shared.hasPermission() {
-                WPath.shared.set_path(path: "::main", qparm: nil)
+                WPath.shared.set_path(path: "main", qparm: nil)
             } else {
-                WPath.shared.set_path(path: "::auth", qparm: nil)
+                WPath.shared.set_path(path: "auth", qparm: nil)
             }
         })
     }

@@ -73,12 +73,12 @@ struct CatPlaylistBody: View {
 }
 
 struct CatPlaylistCover: View {
-    @State var album: Playlist;
+    @State var playlist: Playlist;
     var body: some View {
         VStack {
-            if album.artwork != nil {
+            if playlist.artwork != nil {
                 AsyncImage(
-                    url: album.artwork!.url(width: 512, height: 512),
+                    url: playlist.artwork!.url(width: 512, height: 512),
                     content: { image in
                         image.resizable()
                             .aspectRatio(contentMode: .fit)
@@ -95,7 +95,7 @@ struct CatPlaylistCover: View {
                 )
                 .frame(width: 256, height: 256, alignment: .center)
             }
-            Text(album.standardDescription ?? "")
+            Text(playlist.standardDescription ?? "")
 #if os(macOS)
             .frame(width: 256, alignment: .topLeading)
 #else
@@ -132,14 +132,14 @@ struct CatPlaylist: View {
 #if os(macOS)
                 HStack(alignment: .top, spacing: 8) {
                     CatPlaylistBody(playlist: playlist!)
-                    CatPlaylistCover(album: playlist!)
+                    CatPlaylistCover(playlist: playlist!)
                 }
                 .padding(8)
                 .frame(maxWidth: .infinity, alignment: .topLeading)
 #else
                 VStack(alignment: .leading, spacing: 8) {
-                    CatPlaylistCover(album: album!)
-                    CatPlaylistBody(album: album!)
+                    CatPlaylistCover(playlist: playlist!)
+                    CatPlaylistBody(playlist: playlist!)
                 }
                 .padding(8)
                 .frame(maxWidth: .infinity, alignment: .topLeading)

@@ -28,7 +28,7 @@ struct NotFound: View {
             }
             HStack(spacing: 8) {
                 Button(action: {
-                    WPath.shared.goto(path: "::blank", qparm: nil)
+                    WPath.shared.goto(path: "blank", qparm: nil)
                 }) {
                     Text("Go to main page")
                 }

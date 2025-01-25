@@ -186,10 +186,10 @@ struct SearchItemArtwork: View {
             .onTapGesture(perform: {
                 switch recoitem {
                 case .album(let album):
-                    WPath.shared.goto(path: "::album", qparm: album.id.rawValue)
+                    WPath.shared.goto(path: "album", qparm: album.id.rawValue)
                     break;
                 case .artist(let artist):
-                    WPath.shared.goto(path: "::artist", qparm: artist.id.rawValue)
+                    WPath.shared.goto(path: "artist", qparm: artist.id.rawValue)
                     break;
                 case .curator(_):
                     print("Pressed a curator")
@@ -198,7 +198,7 @@ struct SearchItemArtwork: View {
                     print("Pressed a musicvideo")
                     break;
                 case .playlist(let playlist):
-                    WPath.shared.goto(path: "::playlist", qparm: playlist.id.rawValue)
+                    WPath.shared.goto(path: "playlist", qparm: playlist.id.rawValue)
                     break;
                 case .radioShow(_):
                     print("Pressed a radio show")
@@ -212,8 +212,8 @@ struct SearchItemArtwork: View {
                 case .track(_):
                     play_self()
                     break;
-                case .station(let station):
-                    WPath.shared.goto(path: "::station", qparm: station.id.rawValue)
+                case .station(_):
+                    play_self()
                     break;
                 }
             })

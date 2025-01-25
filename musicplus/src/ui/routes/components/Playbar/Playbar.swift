@@ -86,7 +86,7 @@ struct Playbar: View {
                 switch cent!.item! {
                 case .song(let song):
                     TimeVar.shared.dur = song.duration ?? 0.0;
-                    TimeVar.shared.artworkURL = song.artwork?.url(width: 384, height: 384)?.standardized;
+                    TimeVar.shared.artworkURL = song.artwork?.url(width: 384, height: 384);
                     TimeVar.shared.songName = song.title;
                     TimeVar.shared.songArtist = song.artistName;
                     break;
