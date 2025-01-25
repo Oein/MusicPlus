@@ -13,6 +13,7 @@ struct musicplusApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .navigationTitle("\(WPath.shared.path)?\(WPath.shared.queryparm)")
         }
         .commands(content: {
 #if os(macOS)
