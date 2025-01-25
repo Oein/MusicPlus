@@ -133,7 +133,7 @@ struct SearchItemArtwork: View {
     
     func isArtist() -> Bool {
         switch recoitem {
-        case .artist(let artist):
+        case .artist(_):
             return true
         default:
             return false
@@ -175,41 +175,35 @@ struct SearchItemArtwork: View {
             })
             .onHover(perform: onHov)
             .onTapGesture(perform: {
-#if os(macOS)
                 switch recoitem {
                 case .album(let album):
-                    print("Pressed a album")
+                    WPath.shared.goto(path: "::album", qparm: album.id.rawValue)
                     break;
                 case .artist(let artist):
-                    print("Pressed a artist")
+                    WPath.shared.goto(path: "::artist", qparm: artist.id.rawValue)
                     break;
-                case .curator(let curator):
+                case .curator(_):
                     print("Pressed a curator")
                     break;
-                case .musicVideo(let musicVideo):
+                case .musicVideo(_):
                     print("Pressed a musicvideo")
                     break;
                 case .playlist(let playlist):
-                    print("Pressed a playlist")
+                    WPath.shared.goto(path: "::playlist", qparm: playlist.id.rawValue)
                     break;
-                case .radioShow(let radioShow):
+                case .radioShow(_):
                     print("Pressed a radio show")
                     break;
-                case .recordLabel(let recordLabel):
+                case .recordLabel(_):
                     print("Pressed a recordLabel")
                     break;
-                case .song(let song):
-                    print("Pressed a song")
+                case .song(_):
+                    play_self()
                     break;
                 case .station(let station):
-                    print("Pressed a station")
+                    WPath.shared.goto(path: "::station", qparm: station.id.rawValue)
                     break;
                 }
-#endif
-                
-#if os(iOS)
-                play_self()
-#endif
             })
             .onScrollVisibilityChange(onVischange)
         } else {

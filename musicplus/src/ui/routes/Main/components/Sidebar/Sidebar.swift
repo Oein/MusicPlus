@@ -9,7 +9,6 @@ import Foundation
 import SwiftUI
 
 struct Sidebar: View {
-    var show: Bool;
     var body: some View {
         VStack {
             VStack {
@@ -25,17 +24,16 @@ struct Sidebar: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
             }.frame(height: 44)
             
-            ScrollView {
                 SidebarItem(iconname: "clock", content: "Reccently added", path: "::lib-reccent")
                 SidebarItem(iconname: "music.note", content: "Songs", path: "::lib-song")
                 SidebarItem(iconname: "music.microphone", content: "Artists", path: "::lib-artist")
                 SidebarItem(iconname: "square.stack", content: "Album", path: "::lib-album")
-            }.frame(maxHeight: .infinity)
+           
             
             Spacer()
         }
         .frame(maxHeight: .infinity, alignment: .leading)
-        .frame(width: show ? 180 : 6, alignment: .leading)
+        .frame(width: 180, alignment: .leading)
         .padding(.leading, 6)
         .background(Color.component)
         .clipShape(.rect(cornerRadius: 6))

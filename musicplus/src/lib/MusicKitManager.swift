@@ -5,6 +5,7 @@
 //  Created by oein on 1/18/25.
 //
 import MusicKit
+import Foundation
 
 enum NetworkData<T> {
     case success(data: T)
@@ -16,6 +17,9 @@ class MusicKitManager {
     static let shared = MusicKitManager()
     private init() {
     }
+    
+    var requiredsearchmore = false;
+    var infscrollTimer: Timer? = nil;
     
     func requestAuth() async -> Bool {
         let status = await MusicAuthorization.request()

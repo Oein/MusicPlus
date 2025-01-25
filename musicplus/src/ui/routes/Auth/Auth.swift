@@ -20,7 +20,7 @@ struct AuthPage: View {
                         Task {
                             let res = await MusicKitManager.shared.requestAuth()
                             if res {
-                                PathManager.shared.set_path(path: "::main", qparm: nil)
+                                WPath.shared.set_path(path: "::main", qparm: nil)
                             } else {
                                 print("TODO:: ALERT - AUTH FAILED")
                             }

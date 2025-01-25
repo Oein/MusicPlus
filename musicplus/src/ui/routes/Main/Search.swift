@@ -8,41 +8,102 @@
 import SwiftUI
 import MusicKit
 
-enum MusicItemAny {
-    case album(Album)
-    case artist(Artist)
-    case curator(Curator)
-    case musicVideo(MusicVideo)
-    case playlist(Playlist)
-    case radioShow(RadioShow)
-    case recordLabel(RecordLabel)
-    case song(Song)
-    case station(Station)
+struct Search: View {
+    @State var fetching: Bool = false;
+    @State var trycnt: Int = 0;
+    @State var catalog: MusicCatalogSearchResponse? = nil;
+    @State var results: [MusicItemAny] = [];
+    @State var seltag: Int = 0;
+    @State var page: Int = 0;
+    @State var hasmore: Bool = true;
+    @State var lastkwd: String = "";
     
-    func canBePlayed() -> Bool {
-        switch self {
-        case .song:
-            return true
-        case .album:
-            return true
-        case .playlist:
-            return true
-        case .station:
-            return true
-        default:
-            return false
+    func acl_bg(my: Int) -> Color {
+        if seltag == my {
+            return Color.white
+        }
+        return Color.backgroundPrimary
+    }
+    
+    func acl_fg(my: Int) -> Color {
+        if seltag == my {
+            return Color.black
+        }
+        return Color.foregroundPrimary
+    }
+    
+    func btnact(tag: Int) -> () -> Void {
+        return {
+            seltag = tag;
+            catalog = nil;
+            page = 0;
+            results = [];
+            hasmore = true;
+            fetchResult()
         }
     }
-}
-
-struct Search: View {
-    @State var fetching = false;
-    @State var trycnt = 0;
-    @State var catalog: MusicCatalogSearchResponse? = nil;
     
     var body: some View {
         Layout {
-            if PathManager.shared.queryparm == "" {
+            ScrollView(.horizontal) {
+                HStack {
+                    Button(action: btnact(tag: 0), label: {
+                        Text("No Filter")
+                            .padding(8)
+                            .padding(.horizontal, 4)
+                            .foregroundStyle(acl_fg(my: 0))
+                    })
+                    .buttonStyle(.plain)
+                    .background(acl_bg(my: 0))
+                    
+                    Button(action: btnact(tag: 1), label: {
+                        Text("Stations")
+                            .padding(8)
+                            .padding(.horizontal, 4)
+                            .foregroundStyle(acl_fg(my: 1))
+                    })
+                    .buttonStyle(.plain)
+                    .background(acl_bg(my: 1))
+                    
+                    Button(action: btnact(tag: 2), label: {
+                        Text("Artists")
+                            .padding(8)
+                            .padding(.horizontal, 4)
+                            .foregroundStyle(acl_fg(my: 2))
+                    })
+                    .buttonStyle(.plain)
+                    .background(acl_bg(my: 2))
+                    
+                    Button(action: btnact(tag: 3), label: {
+                        Text("Albums")
+                            .padding(8)
+                            .padding(.horizontal, 4)
+                            .foregroundStyle(acl_fg(my: 3))
+                    })
+                    .buttonStyle(.plain)
+                    .background(acl_bg(my: 3))
+                    
+                    Button(action: btnact(tag: 4), label: {
+                        Text("Songs")
+                            .padding(8)
+                            .padding(.horizontal, 4)
+                            .foregroundStyle(acl_fg(my: 4))
+                    })
+                    .buttonStyle(.plain)
+                    .background(acl_bg(my: 4))
+                }
+                .padding(8)
+            }
+            
+            if seltag == 0 && catalog != nil {
+                Catalog(catalog: catalog)
+            } else if seltag != 0 {
+                SearchResultsView(results: results)
+                    .frame(alignment: .topLeading)
+                    .frame(maxWidth: .infinity)
+            }
+            
+            if WPath.shared.queryparm == "" {
                 Text("Search anything you want")
                     .padding(8)
                     .font(.satoshiMedium18)
@@ -53,118 +114,135 @@ struct Search: View {
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
                 .padding(8)
-            } else if catalog != nil {
-                VStack(alignment: .leading) {
-                    if catalog!.topResults.count > 0 {
-                        Text(catalog!.topResults.title ?? "Top results")
-                            .font(.satoshiBold28)
-                        SearchResults(results: catalog!.topResults.compactMap {
-                            switch $0 {
-                            case .album(let album):
-                                return MusicItemAny.album(album);
-                            case .artist(let artist):
-                                return MusicItemAny.artist(artist);
-                            case .curator(let curator):
-                                return MusicItemAny.curator(curator);
-                            case .musicVideo(let musicVideo):
-                                return MusicItemAny.musicVideo(musicVideo);
-                            case .playlist(let playlist):
-                                return MusicItemAny.playlist(playlist);
-                            case .radioShow(let radioShow):
-                                return MusicItemAny.radioShow(radioShow);
-                            case .recordLabel(let recordLabel):
-                                return MusicItemAny.recordLabel(recordLabel);
-                            case .song(let song):
-                                return MusicItemAny.song(song);
-                            case .station(let station):
-                                return MusicItemAny.station(station);
-                            default:
-                                return nil;
-                            }
-                        })
-                        .frame(maxWidth: .infinity)
-                        SPCE()
-                    }
-                    
-                    if catalog!.artists.count > 0 {
-                        Text(catalog!.artists.title ?? "Artists")
-                            .font(.satoshiBold28)
-                        SearchResults(results: catalog!.artists.compactMap {
-                            return .artist($0)
-                        })
-                        .frame(maxWidth: .infinity)
-                        SPCE()
-                    }
-                    
-                    if catalog!.albums.count > 0 {
-                        Text(catalog!.albums.title ?? "Albums")
-                            .font(.satoshiBold28)
-                        SearchResults(results: catalog!.albums.compactMap {
-                            return .album($0)
-                        })
-                        .frame(maxWidth: .infinity)
-                        SPCE()
-                    }
-                    
-                    if catalog!.songs.count > 0 {
-                        Text(catalog!.songs.title ?? "Songs")
-                            .font(.satoshiBold28)
-                        SearchResults(results: catalog!.songs.compactMap {
-                            return .song($0)
-                        })
-                        .frame(maxWidth: .infinity)
-                        SPCE()
-                    }
-                    
-                    if catalog!.stations.count > 0 {
-                        Text(catalog!.stations.title ?? "Stations")
-                            .font(.satoshiBold28)
-                        SearchResults(results: catalog!.stations.compactMap {
-                            return .station($0)
-                        })
-                        .frame(maxWidth: .infinity)
-                        SPCE()
-                    }
-                    
-                    if catalog!.playlists.count > 0 {
-                        Text(catalog!.playlists.title ?? "Playlists")
-                            .font(.satoshiBold28)
-                        SearchResults(results: catalog!.playlists.compactMap {
-                            return .playlist($0)
-                        })
-                        .frame(maxWidth: .infinity)
-                    }
-                }
-                .padding(8)
-                .frame(alignment: .topLeading)
+            }
+            
+            if hasmore {
+                SPCE()
+                SPCE()
+                SPCE()
             }
         }
         .onAppear(perform: fetchResult)
-        .onChange(of: PathManager.shared.queryparm, fetchResult)
+        .onAppear(perform: applyTimer)
+        .onDisappear(perform: disapplyTimer)
+        .onChange(of: WPath.shared.queryparm, fetchResult)
+    }
+    
+    func applyTimer() {
+        MusicKitManager.shared.infscrollTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true, block: { _ in
+            if MusicKitManager.shared.requiredsearchmore {
+                fetchResult()
+                MusicKitManager.shared.requiredsearchmore = false;
+            }
+        });
+    }
+    
+    func disapplyTimer() {
+        MusicKitManager.shared.infscrollTimer?.invalidate()
+    }
+    
+    func tys() -> [any MusicCatalogSearchable.Type] {
+        if seltag == 0 {
+            return [Song.self, Album.self, Artist.self, Playlist.self, Station.self];
+        }
+        if seltag == 1 {
+            return [Station.self];
+        }
+        if seltag == 2 {
+            return [Artist.self];
+        }
+        if seltag == 3 {
+            return [Album.self];
+        }
+        if seltag == 4 {
+            return [Song.self];
+        }
+        
+        return [Song.self, Album.self, Artist.self, Playlist.self, Station.self];
     }
     
     func fetchResult() {
-        if PathManager.shared.queryparm == "" {
+        if WPath.shared.queryparm == "" {
             return;
         }
+        let reqText = WPath.shared.queryparm;
+        if lastkwd != reqText {
+            hasmore = true;
+            results = [];
+            catalog = nil;
+            fetching = false;
+            page = 0;
+            lastkwd = reqText;
+        }
+        if !hasmore {
+            return;
+        }
+        if fetching {
+            return;
+        }
+        
         fetching = true;
         trycnt = 0;
-        let reqText = PathManager.shared.queryparm;
         Task {
             while fetching == true && trycnt < 3 {
-                var request = MusicCatalogSearchRequest(term: reqText, types: [Song.self, Album.self, Artist.self, Playlist.self, Station.self])
-                request.includeTopResults = true;
+                var request = MusicCatalogSearchRequest(
+                    term: reqText,
+                    types: tys()
+                )
+                
+                if seltag == 0 {
+                    request.includeTopResults = true;
+                    hasmore = false;
+                }
+                else {
+                    request.limit = 25;
+                    request.offset = page * 25;
+                }
+                
                 do {
                     let response = try await request.response()
-                    if PathManager.shared.queryparm != reqText {
+                    if WPath.shared.queryparm != reqText {
                         return
                     }
                     fetching = false;
                     trycnt = 0;
                     
-                    catalog = response;
+                    if seltag == 0 {
+                        catalog = response;
+                    }
                     print("Search about " + reqText)
-                    print(response)
+                    
+                    switch seltag {
+                    case 1:
+                        hasmore = response.stations.hasNextBatch
+                        results = results + response.stations.compactMap({ val in
+                            return .station(val);
+                        })
+                        break;
+                    case 2:
+                        hasmore = response.artists.hasNextBatch
+                        results = results + response.artists.compactMap({ val in
+                            return .artist(val);
+                        })
+                        break;
+                    case 3:
+                        hasmore = response.albums.hasNextBatch
+                        results = results + response.albums.compactMap({ val in
+                            return .album(val);
+                        })
+                        break;
+                    case 4:
+                        hasmore = response.songs.hasNextBatch
+                        results = results + response.songs.compactMap({ val in
+                            return .song(val);
+                        })
+                        break;
+                    default:
+                        hasmore = false;
+                        break;
+                    }
+                    
+                    page += 1;
                 } catch {
                     print("Search failed: \(error)")
                 }

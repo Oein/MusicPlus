@@ -13,7 +13,7 @@ struct HeaderButton: View {
     var name: String;
     
     func colorByPath() -> Color {
-        if PathManager.shared.path == path {
+        if WPath.shared.path == path {
             return Color.foregroundPrimary
         } else {
             return Color.foregroundSecondary
@@ -21,14 +21,14 @@ struct HeaderButton: View {
     }
     
     func buttonBackground() -> Color {
-        return Color.component.opacity(path == PathManager.shared.path ? 1.0 : 0.0)
+        return Color.component.opacity(path == WPath.shared.path ? 1.0 : 0.0)
     }
     
     var body: some View {
         VStack {
             Button(action: {
-                if PathManager.shared.path != path {
-                    PathManager.shared.goto(path: path, qparm: nil);
+                if WPath.shared.path != path {
+                    WPath.shared.goto(path: path, qparm: nil);
                 }
             }) {
                 HStack(alignment: .center) {

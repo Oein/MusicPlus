@@ -13,8 +13,37 @@ import Foundation
 struct ContentView: View {
     
     var body: some View {
-        Router()
+        WRouterView { url, _ in
+            switch url {
+            case "::blank":
+                PreloadPage()
+            case "::auth":
+                AuthPage()
+            case "::main":
+                MainPage()
+            case "::search":
+                Search()
+            case "::lib-reccent":
+                ReccentlyAdded()
+            case "::lib-song":
+                LibSong()
+            case "::lib-artist":
+                Text("LIBARTIST")
+            case "::lib-album":
+                Text("LIBALBUM")
+            case "::artist":
+                Text("ARTIST")
+            case "::playlist":
+                Text("PLAYLIST")
+            case "::album":
+                Text("ALBUM")
+            default:
+                NotFound()
+            }
+        }
             .colorScheme(.dark)
+            .foregroundStyle(Color("Foreground-Primary"))
+            .font(.satoshiMedium16)
     }
 }
 

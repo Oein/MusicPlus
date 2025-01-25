@@ -14,8 +14,8 @@ struct SidebarItem: View {
     
     var body: some View {
         Button(action: {
-            if PathManager.shared.path != path {
-                PathManager.shared.goto(path: path, qparm: nil)
+            if WPath.shared.path != path {
+                WPath.shared.goto(path: path, qparm: nil)
             }
         }) {
             VStack {
@@ -33,5 +33,6 @@ struct SidebarItem: View {
             .frame(maxWidth: .infinity, maxHeight: .greatestFiniteMagnitude, alignment: .leading)
         }
         .buttonStyle(.plain)
+        .frame(maxHeight: 50)
     }
 }

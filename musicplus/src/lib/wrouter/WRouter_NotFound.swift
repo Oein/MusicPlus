@@ -1,17 +1,24 @@
 //
-//  NotFound.swift
-//  musicplus
+//  WRouter_NotFound.swift
+//  weblikerouter
 //
-//  Created by oein on 1/19/25.
+//  Created by oein on 1/26/25.
 //
 
+import Foundation
 import SwiftUI
 
-struct NotFound: View {
+struct WRouter_NotFound: View {
+    #if os(iOS)
+    var bgcl = UIColor(red: 32/255, green: 32/255, blue: 32/255, alpha: 1.0);
+    #else
+    var bgcl = NSColor(red: 32/255, green: 32/255, blue: 32/255, alpha: 1.0);
+    #endif
     var body: some View {
         VStack(alignment: .leading) {
             Text("Not Found")
-                .font(.satoshiBold28)
+                .font(.system(size: 28))
+                .bold()
             HStack {
                 Group {
                     Text("The requested page")
@@ -20,9 +27,12 @@ struct NotFound: View {
                             .padding(.horizontal, 12)
                             .padding(.vertical, 6)
                     }
-                    .background(Color("Background-Secondary"))
+                    .background(Color(
+                        bgcl
+                    ))
                     .foregroundStyle(Color.white)
-                    .font(.satoshiBold14)
+                    .font(.system(size: 14))
+                    .bold()
                     Text("is not found")
                 }
             }
@@ -41,8 +51,4 @@ struct NotFound: View {
             }
         }.padding(8)
     }
-}
-
-#Preview {
-    NotFound ()
 }

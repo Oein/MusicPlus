@@ -10,7 +10,7 @@ import SwiftUI
 
 struct Header: View {
     func colorByPath(reqPath: String) -> Color {
-        if PathManager.shared.path == reqPath {
+        if WPath.shared.path == reqPath {
             return Color.foregroundPrimary
         } else {
             return Color.foregroundSecondary

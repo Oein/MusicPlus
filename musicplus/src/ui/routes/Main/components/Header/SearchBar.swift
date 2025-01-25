@@ -9,14 +9,14 @@ import SwiftUI
 
 struct SearchBar: View {
     @FocusState private var isTextFieldFocused: Bool
-    @State private var text: String = ""
+    @State private var text: String = WPath.shared.path == "::search" ? WPath.shared.queryparm : ""
     
     var path = "::search";
     var icon = "magnifyingglass";
     var name = "Search";
     
     func colorByPath() -> Color {
-        if PathManager.shared.path == path {
+        if WPath.shared.path == path {
             return Color.foregroundPrimary
         } else {
             return Color.foregroundSecondary
@@ -24,7 +24,7 @@ struct SearchBar: View {
     }
     
     func buttonBackground() -> Color {
-        return Color.component.opacity(path == PathManager.shared.path ? 1.0 : 0.0)
+        return Color.component.opacity(path == WPath.shared.path ? 1.0 : 0.0)
     }
     
     var body: some View {
@@ -33,10 +33,10 @@ struct SearchBar: View {
                 Image(systemName: icon)
                     .foregroundStyle(colorByPath())
                     .frame(width: 20, height: 20, alignment: .center)
-                if PathManager.shared.path == path {
+                if WPath.shared.path == path {
                     TextField("Search", text: $text, onCommit: {
-                        if PathManager.shared.queryparm != text {
-                            PathManager.shared.replace(path: "::search", qparm: text)
+                        if WPath.shared.queryparm != text {
+                            WPath.shared.replace(path: "::search", qparm: text)
                         }
                     })
                     .textFieldStyle(.plain)
@@ -48,8 +48,8 @@ struct SearchBar: View {
                         isTextFieldFocused = false;
                     }
                     .onChange(of: text, {
-                        if PathManager.shared.queryparm != text {
-                            PathManager.shared.replace(path: "::search", qparm: text)
+                        if WPath.shared.queryparm != text {
+                            WPath.shared.replace(path: "::search", qparm: text)
                         }
                     })
                 } else {
@@ -65,8 +65,8 @@ struct SearchBar: View {
         .background(buttonBackground())
         .clipShape(.rect(cornerRadius: 6))
         .onTapGesture {
-            if PathManager.shared.path != path {
-                PathManager.shared.goto(path: path, qparm: nil);
+            if WPath.shared.path != path {
+                WPath.shared.goto(path: path, qparm: nil);
             }
         }
     }

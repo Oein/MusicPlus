@@ -1,54 +1,26 @@
 //
-//  PathManager.swift
-//  musicplus
+//  WRouter_PathManager.swift
+//  weblikerouter
 //
-//  Created by oein on 1/19/25.
+//  Created by oein on 1/26/25.
 //
 
 import Foundation
+import SwiftUI
 
-
-struct Stack<T> {
-    private var stack: [T] = []
-    
-    public var count: Int {
-        return stack.count
-    }
-    
-    public var isEmpty: Bool {
-        return stack.isEmpty
-    }
-    
-    public mutating func push(_ element: T) {
-        stack.append(element)
-    }
-    
-    public mutating func pop() -> T? {
-        return isEmpty ? nil : stack.popLast()
-    }
-    
-    public mutating func clear() {
-        stack.removeAll()
-    }
-}
-
-struct IURL {
-    var path: String;
-    var qparm: String;
-}
-
-@Observable class PathManager {
-    static let shared = PathManager()
+@Observable class WPath {
+    static let shared = WPath()
     private init() { }
     
-    var path = "::blank";
-    var queryparm = "";
+    public var path = "::blank";
+    public var queryparm = "";
+    public var background: Color? = Color.backgroundMain;
     
-    var viewhistory = Stack<IURL>();
-    var backward_history = Stack<IURL>();
+    private var viewhistory = WRouter_Stack<WRouter_URL>();
+    private var backward_history = WRouter_Stack<WRouter_URL>();
     
     func goto(path: String, qparm: String?) {
-        self.viewhistory.push(IURL(path: self.path, qparm: self.queryparm));
+        self.viewhistory.push(WRouter_URL(path: self.path, qparm: self.queryparm));
         self.backward_history.clear();
         
         self.path = path;
@@ -74,7 +46,7 @@ struct IURL {
         }
         
         let lastPath = self.viewhistory.pop()!;
-        self.backward_history.push(IURL(path: self.path, qparm: self.queryparm));
+        self.backward_history.push(WRouter_URL(path: self.path, qparm: self.queryparm));
         self.path = lastPath.path;
         self.queryparm = lastPath.qparm;
     }
@@ -89,7 +61,7 @@ struct IURL {
         }
         
         let futurePath = self.backward_history.pop()!;
-        self.backward_history.push(IURL(path: self.path, qparm: self.queryparm));
+        self.backward_history.push(WRouter_URL(path: self.path, qparm: self.queryparm));
         
         self.path = futurePath.path;
         self.queryparm = futurePath.qparm;
