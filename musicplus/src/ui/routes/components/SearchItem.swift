@@ -32,6 +32,8 @@ struct SearchItem: View {
             return recordLabel.name
         case .song(let song):
             return song.title
+        case .track(let song):
+            return song.title
         }
     }
     
@@ -75,6 +77,10 @@ struct SearchItem: View {
                 if song.artwork != nil {
                     SearchItemArtwork(artwork: song.artwork!, recoitem: recoitem)
                 }
+            case .track(let song):
+                if song.artwork != nil {
+                    SearchItemArtwork(artwork: song.artwork!, recoitem: recoitem)
+                }
             }
             
             // Title
@@ -110,6 +116,9 @@ struct SearchItemArtwork: View {
             var play = true;
             switch recoitem {
             case .song(let song):
+                MusicKit.ApplicationMusicPlayer.shared.queue = [song];
+                break;
+            case .track(let song):
                 MusicKit.ApplicationMusicPlayer.shared.queue = [song];
                 break;
             case .album(let album):
@@ -198,6 +207,9 @@ struct SearchItemArtwork: View {
                     print("Pressed a recordLabel")
                     break;
                 case .song(_):
+                    play_self()
+                    break;
+                case .track(_):
                     play_self()
                     break;
                 case .station(let station):

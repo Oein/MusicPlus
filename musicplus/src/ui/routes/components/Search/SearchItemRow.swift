@@ -32,6 +32,8 @@ struct SearchItemRow: View {
             return recordLabel.name
         case .song(let song):
             return song.title
+        case .track(let track):
+            return track.title
         }
     }
     
@@ -53,6 +55,8 @@ struct SearchItemRow: View {
             return nil
         case .song(let song):
             return song.artistName
+        case .track(let track):
+            return track.artistName
         case .station(_):
             return nil
         }
@@ -85,6 +89,12 @@ struct SearchItemRow: View {
             case .song(let song):
                 Task {
                     MusicKit.ApplicationMusicPlayer.shared.queue = [song];
+                    try await MusicKit.ApplicationMusicPlayer.shared.play();
+                }
+                break;
+            case .track(let track):
+                Task {
+                    MusicKit.ApplicationMusicPlayer.shared.queue = [track];
                     try await MusicKit.ApplicationMusicPlayer.shared.play();
                 }
                 break;
@@ -131,6 +141,10 @@ struct SearchItemRow: View {
                 case .song(let song):
                     if song.artwork != nil {
                         SearchItemRowArtwork(artwork: song.artwork!, recoitem: recoitem)
+                    }
+                case .track(let track):
+                    if track.artwork != nil {
+                        SearchItemRowArtwork(artwork: track.artwork!, recoitem: recoitem)
                     }
                 }
                 
