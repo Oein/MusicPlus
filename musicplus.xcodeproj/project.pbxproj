@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		28EFED9D2D4597C100CA20BD /* WrappingHStack in Frameworks */ = {isa = PBXBuildFile; productRef = 28EFED9C2D4597C100CA20BD /* WrappingHStack */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		287F273E2D3AB45600D1A907 /* musicplus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = musicplus.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -36,6 +40,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				28EFED9D2D4597C100CA20BD /* WrappingHStack in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +83,7 @@
 			);
 			name = musicplus;
 			packageProductDependencies = (
+				28EFED9C2D4597C100CA20BD /* WrappingHStack */,
 			);
 			productName = musicplus;
 			productReference = 287F273E2D3AB45600D1A907 /* musicplus.app */;
@@ -107,6 +113,9 @@
 			);
 			mainGroup = 287F27352D3AB45600D1A907;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				28EFED9B2D4597C100CA20BD /* XCRemoteSwiftPackageReference "WrappingHStack" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 287F273F2D3AB45600D1A907 /* Products */;
 			projectDirPath = "";
@@ -356,6 +365,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		28EFED9B2D4597C100CA20BD /* XCRemoteSwiftPackageReference "WrappingHStack" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/dkk/WrappingHStack";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.2.11;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		28EFED9C2D4597C100CA20BD /* WrappingHStack */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 28EFED9B2D4597C100CA20BD /* XCRemoteSwiftPackageReference "WrappingHStack" */;
+			productName = WrappingHStack;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 287F27362D3AB45600D1A907 /* Project object */;
 }

@@ -19,6 +19,7 @@ enum MusicItemAny {
     case recordLabel(RecordLabel)
     case song(Song)
     case station(Station)
+    case track(Track)
     
     func canBePlayed() -> Bool {
         switch self {
@@ -29,6 +30,8 @@ enum MusicItemAny {
         case .playlist:
             return true
         case .station:
+            return true
+        case .track:
             return true
         default:
             return false
