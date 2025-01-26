@@ -143,8 +143,7 @@ struct Playbar: View {
                             .font(.satoshiRegular14)
                             .frame(minWidth: 50, alignment: .center)
 #if os(iOS)
-                        
-                        ProgressBar().frame(minWidth: 120)
+                        ProgressBar(iOS_Width: 200).frame(minWidth: 200)
 #else
                         ProgressBar()
 #endif
